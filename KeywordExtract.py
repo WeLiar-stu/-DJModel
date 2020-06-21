@@ -14,7 +14,7 @@ def get_stopword_list():
     # 停用词表存储路径，每一行为一个词，按行读取进行加载
     # 进行编码转换确保匹配准确率
     stop_word_path = './stopword.txt'
-    stopword_list = [sw.replace('\n', '') for sw in open(stop_word_path).readlines()]
+    stopword_list = [sw.replace('\n', '') for sw in open(stop_word_path,'r', encoding='UTF-8').readlines()]
     return stopword_list
 
 
@@ -55,7 +55,7 @@ def word_filter(seg_list, pos=False):
 def load_data(pos=False, corpus_path='./corpus.txt'):
     # 调用上面方式对数据集进行处理，处理后的每条数据仅保留非干扰词
     doc_list = []
-    for line in open(corpus_path, 'r'):
+    for line in open(corpus_path, 'r',encoding='UTF-8'):
         content = line.strip()
         seg_list = seg_to_list(content, pos)
         filter_list = word_filter(seg_list, pos)
@@ -248,27 +248,19 @@ def topic_extract(word_list, model, pos=False, keyword_num=10):
 
 
 if __name__ == '__main__':
-    text = '6月19日,《2012年度“中国爱心城市”公益活动新闻发布会》在京举行。' + \
-           '中华社会救助基金会理事长许嘉璐到会讲话。基金会高级顾问朱发忠,全国老龄' + \
-           '办副主任朱勇,民政部社会救助司助理巡视员周萍,中华社会救助基金会副理事长耿志远,' + \
-           '重庆市民政局巡视员谭明政。晋江市人大常委会主任陈健倩,以及10余个省、市、自治区民政局' + \
-           '领导及四十多家媒体参加了发布会。中华社会救助基金会秘书长时正新介绍本年度“中国爱心城' + \
-           '市”公益活动将以“爱心城市宣传、孤老关爱救助项目及第二届中国爱心城市大会”为主要内容,重庆市' + \
-           '、呼和浩特市、长沙市、太原市、蚌埠市、南昌市、汕头市、沧州市、晋江市及遵化市将会积极参加' + \
-           '这一公益活动。中国雅虎副总编张银生和凤凰网城市频道总监赵耀分别以各自媒体优势介绍了活动' + \
-           '的宣传方案。会上,中华社会救助基金会与“第二届中国爱心城市大会”承办方晋江市签约,许嘉璐理' + \
-           '事长接受晋江市参与“百万孤老关爱行动”向国家重点扶贫地区捐赠的价值400万元的款物。晋江市人大' + \
-           '常委会主任陈健倩介绍了大会的筹备情况。'
+    text = '由密码学的基本概念出发,介绍密码学及其应用的最新发展状况,包括公钥密码体制及其安全理论、各种密码协议及其面临的攻击,并对安全协议的分析方法进行概述。根据当今的发展状况指出密码学的发展趋势和未来的研究方向。'
 
     pos = True
+    #  将文本以词性标注的方法实现分割
     seg_list = seg_to_list(text, pos)
     filter_list = word_filter(seg_list, pos)
+    print(filter_list)
 
     print('TF-IDF模型结果：')
     tfidf_extract(filter_list)
-    print('TextRank模型结果：')
-    textrank_extract(text)
-    print('LSI模型结果：')
-    topic_extract(filter_list, 'LSI', pos)
-    print('LDA模型结果：')
-    topic_extract(filter_list, 'LDA', pos)
+    # print('TextRank模型结果：')
+    # textrank_extract(text)
+    # print('LSI模型结果：')
+    # topic_extract(filter_list, 'LSI', pos)
+    # print('LDA模型结果：')
+    # topic_extract(filter_list, 'LDA', pos)
